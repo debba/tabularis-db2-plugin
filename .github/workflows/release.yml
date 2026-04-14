@@ -102,9 +102,16 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y unixodbc-dev zip
 
-      - name: Install ODBC build dependencies (macOS)
-        if: runner.os == 'macOS'
+      - name: Install ODBC build dependencies (macOS native)
+        if: runner.os == 'macOS' && matrix.target == 'aarch64-apple-darwin'
         run: brew install unixodbc
+
+      - name: Install ODBC build dependencies (macOS x86_64 cross-compile)
+        if: runner.os == 'macOS' && matrix.target == 'x86_64-apple-darwin'
+        run: |
+          softwareupdate --install-rosetta --agree-to-license || true
+          arch -x86_64 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          arch -x86_64 /usr/local/bin/brew install unixodbc
 
       - name: Cache cargo registry & build
         uses: actions/cache@v4
@@ -117,6 +124,8 @@ jobs:
           restore-keys: ${{ matrix.target }}-cargo-
 
       - name: Build release binary
+        env:
+          LIBRARY_PATH: ${{ matrix.target == 'x86_64-apple-darwin' && '/usr/local/lib' || '' }}
         run: cargo build --release --target ${{ matrix.target }}
 
       - name: Package (unix)
