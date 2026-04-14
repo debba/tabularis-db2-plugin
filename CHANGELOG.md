@@ -2,7 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [0.0.1] - 2026-04-14
+
+### Bug Fixes
+
+- *(metadata)* Correct foreign key joins to map referenced columns by @debba
 
 ### Features
- - Initial IBM Db2 plugin scaffold with modern Tabularis manifest, modular handlers, ODBC connectivity, DDL generation, and unit tests.
+
+- Add initial IBM Db2 plugin scaffold with CI and tooling by @debba
+- *(test)* Add dockerized DB2 integration tests and setup scripts by @debba
+
+### Miscellaneous
+
+- *(release)* Push commits to master branch instead of main by @debba
+
