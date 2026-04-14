@@ -1,0 +1,85 @@
+{
+  "id": "db2",
+  "name": "IBM Db2",
+  "version": "0.1.0",
+  "description": "IBM Db2 driver plugin for Tabularis",
+  "default_port": 50000,
+  "default_username": "db2inst1",
+  "executable": "tabularis-db2-plugin",
+  "color": "#2563eb",
+  "icon": "database",
+  "capabilities": {
+    "schemas": true,
+    "views": true,
+    "routines": true,
+    "file_based": false,
+    "folder_based": false,
+    "connection_string": true,
+    "connection_string_example": "db2://user:pass@localhost:50000/sample",
+    "identifier_quote": "\"",
+    "alter_primary_key": false,
+    "auto_increment_keyword": "",
+    "serial_type": "",
+    "inline_pk": false,
+    "alter_column": true,
+    "create_foreign_keys": true,
+    "no_connection_required": false,
+    "manage_tables": true,
+    "readonly": false
+  },
+  "settings": [
+    {
+      "key": "driver_name",
+      "label": "ODBC Driver Name",
+      "type": "string",
+      "default": "IBM DB2 ODBC DRIVER",
+      "description": "ODBC driver name used in the DB2 connection string."
+    },
+    {
+      "key": "security",
+      "label": "Security Mode",
+      "type": "select",
+      "default": "none",
+      "description": "Optional DB2 security mode.",
+      "options": ["none", "ssl"]
+    },
+    {
+      "key": "current_schema",
+      "label": "Default Schema",
+      "type": "string",
+      "default": "",
+      "description": "Optional default schema set on each connection."
+    },
+    {
+      "key": "extra_properties",
+      "label": "Extra Connection Properties",
+      "type": "string",
+      "default": "",
+      "description": "Semicolon-separated extra ODBC properties appended to the connection string."
+    }
+  ],
+  "data_types": [
+    { "name": "SMALLINT", "category": "numeric", "requires_length": false, "requires_precision": false, "supports_auto_increment": false },
+    { "name": "INTEGER", "category": "numeric", "requires_length": false, "requires_precision": false, "supports_auto_increment": false },
+    { "name": "BIGINT", "category": "numeric", "requires_length": false, "requires_precision": false, "supports_auto_increment": false },
+    { "name": "DECIMAL", "category": "numeric", "requires_length": false, "requires_precision": true, "supports_auto_increment": false },
+    { "name": "DECFLOAT", "category": "numeric", "requires_length": false, "requires_precision": true, "supports_auto_increment": false },
+    { "name": "REAL", "category": "numeric", "requires_length": false, "requires_precision": false, "supports_auto_increment": false },
+    { "name": "DOUBLE", "category": "numeric", "requires_length": false, "requires_precision": false, "supports_auto_increment": false },
+    { "name": "CHAR", "category": "string", "requires_length": true, "requires_precision": false, "default_length": "1", "supports_auto_increment": false },
+    { "name": "VARCHAR", "category": "string", "requires_length": true, "requires_precision": false, "default_length": "255", "supports_auto_increment": false },
+    { "name": "CLOB", "category": "string", "requires_length": true, "requires_precision": false, "default_length": "1M", "supports_auto_increment": false },
+    { "name": "GRAPHIC", "category": "string", "requires_length": true, "requires_precision": false, "default_length": "1", "supports_auto_increment": false },
+    { "name": "VARGRAPHIC", "category": "string", "requires_length": true, "requires_precision": false, "default_length": "255", "supports_auto_increment": false },
+    { "name": "DBCLOB", "category": "string", "requires_length": true, "requires_precision": false, "default_length": "1M", "supports_auto_increment": false },
+    { "name": "DATE", "category": "date", "requires_length": false, "requires_precision": false, "supports_auto_increment": false },
+    { "name": "TIME", "category": "date", "requires_length": false, "requires_precision": false, "supports_auto_increment": false },
+    { "name": "TIMESTAMP", "category": "date", "requires_length": false, "requires_precision": false, "supports_auto_increment": false },
+    { "name": "BLOB", "category": "binary", "requires_length": true, "requires_precision": false, "default_length": "1M", "supports_auto_increment": false },
+    { "name": "BINARY", "category": "binary", "requires_length": true, "requires_precision": false, "default_length": "16", "supports_auto_increment": false },
+    { "name": "VARBINARY", "category": "binary", "requires_length": true, "requires_precision": false, "default_length": "255", "supports_auto_increment": false },
+    { "name": "XML", "category": "other", "requires_length": false, "requires_precision": false, "supports_auto_increment": false },
+    { "name": "JSON", "category": "json", "requires_length": false, "requires_precision": false, "supports_auto_increment": false }
+  ]
+}
+

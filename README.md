@@ -1,0 +1,205 @@
+<div align="center">
+  <img src="https://raw.githubusercontent.com/debba/tabularis/main/public/logo-sm.png" width="120" height="120" />
+</div>
+
+# tabularis-db2-plugin
+<p align="center">
+
+![](https://img.shields.io/badge/status-experimental-orange?style=flat)
+[![Discord](https://img.shields.io/discord/1470772941296894128?color=5865F2&logo=discord&logoColor=white)](https://discord.gg/YrZPHAwMSG)
+
+</p>
+
+An [IBM Db2](https://www.ibm.com/products/db2) plugin for [Tabularis](https://github.com/debba/tabularis), the lightweight database management tool.
+
+This plugin enables Tabularis to connect to Db2 through **ODBC**, browse schemas and objects, run SQL queries, perform inline CRUD operations, and generate DDL through the Tabularis JSON-RPC plugin interface.
+
+**Discord** - [Join our discord server](https://discord.gg/YrZPHAwMSG) and chat with the maintainers.
+
+## Table of Contents
+
+- [Features](#features)
+- [Supported Db2 Data Types](#supported-db2-data-types)
+- [Requirements](#requirements)
+- [Installation](#installation)
+  - [Automatic (via Tabularis)](#automatic-via-tabularis)
+  - [Manual Installation](#manual-installation)
+- [How It Works](#how-it-works)
+- [Supported Operations](#supported-operations)
+- [Building from Source](#building-from-source)
+- [Development](#development)
+- [Known Limitations](#known-limitations)
+- [License](#license)
+
+## Features
+
+- **Connection via ODBC** — Connect to Db2 using host, port, database, credentials, and optional plugin settings.
+- **Schema & Object Browsing** — List schemas, tables, columns, views, indexes, foreign keys, and routines.
+- **Query Execution** — Run arbitrary SQL queries with pagination support.
+- **Inline Editing** — Insert, update, and delete rows directly from the Tabularis grid.
+- **DDL Generation** — Generate `CREATE TABLE`, `ALTER TABLE`, `CREATE INDEX`, and `ADD FOREIGN KEY` SQL.
+- **Modern Plugin Manifest** — Uses current Tabularis plugin manifest fields including `settings`, modern capabilities, color/icon metadata, and connection string support.
+- **Modular Rust Codebase** — RPC, client creation, metadata handlers, CRUD, DDL, and utilities are split into dedicated modules with unit tests.
+
+## Supported Db2 Data Types
+
+| Category | Types |
+|---|---|
+| **Numeric** | SMALLINT, INTEGER, BIGINT, DECIMAL, DECFLOAT, REAL, DOUBLE |
+| **String** | CHAR, VARCHAR, CLOB, GRAPHIC, VARGRAPHIC, DBCLOB |
+| **Date/Time** | DATE, TIME, TIMESTAMP |
+| **Binary** | BLOB, BINARY, VARBINARY |
+| **Other** | XML, JSON |
+
+## Requirements
+
+This plugin uses the [`odbc-api`](https://crates.io/crates/odbc-api) crate and requires a working Db2 ODBC driver on the host system.
+
+Typical requirement:
+
+- IBM Db2 ODBC driver installed
+- ODBC driver manager available on the OS
+- network connectivity to the Db2 server
+
+You can configure the driver name from Tabularis through the plugin settings.
+
+## Installation
+
+### Automatic (via Tabularis)
+
+Once the plugin is packaged and published in a registry-compatible format, it can be installed through the Tabularis plugin UI.
+
+### Manual Installation
+
+1. Build the plugin in release mode:
+
+```bash
+cargo build --release
+```
+
+2. Copy `tabularis-db2-plugin` (or `tabularis-db2-plugin.exe` on Windows) and `manifest.json` into the Tabularis plugins directory:
+
+| OS | Plugins Directory |
+|---|---|
+| **Linux** | `~/.local/share/tabularis/plugins/db2/` |
+| **macOS** | `~/Library/Application Support/com.debba.tabularis/plugins/db2/` |
+| **Windows** | `%APPDATA%\com.debba.tabularis\plugins\db2\` |
+
+3. Restart Tabularis.
+
+### Local Sync Helper
+
+A convenience script is provided to build and copy the plugin into the local Tabularis plugins directory:
+
+```bash
+./sync.sh
+```
+
+## How It Works
+
+The plugin is a standalone Rust binary that communicates with Tabularis through **JSON-RPC 2.0 over stdio**:
+
+1. Tabularis spawns the plugin process.
+2. Requests are sent as newline-delimited JSON-RPC messages to the plugin `stdin`.
+3. The plugin opens Db2 ODBC connections on demand and writes JSON-RPC responses to `stdout`.
+
+The code is intentionally split by responsibility:
+
+- `src/main.rs` — request loop and dispatch
+- `src/client.rs` — ODBC connection string construction and query execution
+- `src/handlers/metadata.rs` — schemas, tables, columns, views, indexes, FKs, routines
+- `src/handlers/query.rs` — connection test, query execution, explain stub
+- `src/handlers/crud.rs` — insert, update, delete
+- `src/handlers/ddl.rs` — SQL generation helpers
+- `src/utils/` — pure helpers with unit tests
+
+## Supported Operations
+
+| Method | Description |
+|---|---|
+| `initialize` | Loads plugin settings sent by Tabularis |
+| `test_connection` / `ping` | Verifies Db2 connectivity |
+| `get_databases` | Returns the current server/database identity |
+| `get_schemas` | Lists Db2 schemas |
+| `get_tables` | Lists base tables in the selected schema |
+| `get_columns` | Returns column metadata for a table or view |
+| `get_foreign_keys` | Lists foreign keys for a table |
+| `get_indexes` | Lists indexes for a table |
+| `get_views` | Lists views in the selected schema |
+| `get_view_definition` | Returns the stored view definition |
+| `get_view_columns` | Returns column metadata for a view |
+| `get_routines` | Lists routines in the selected schema |
+| `get_routine_parameters` | Returns routine parameters |
+| `get_routine_definition` | Returns the stored routine body when available |
+| `execute_query` | Runs SQL with pagination for `SELECT` / `WITH` queries |
+| `insert_record` | Inserts a row |
+| `update_record` | Updates a row by primary key column |
+| `delete_record` | Deletes a row by primary key column |
+| `get_schema_snapshot` | Returns all tables with columns and foreign keys |
+| `get_all_columns_batch` | Returns all column metadata for a schema |
+| `get_all_foreign_keys_batch` | Returns all FK metadata for a schema |
+| `get_create_table_sql` | Generates `CREATE TABLE` SQL |
+| `get_add_column_sql` | Generates `ALTER TABLE ... ADD COLUMN` SQL |
+| `get_alter_column_sql` | Generates `ALTER TABLE ... ALTER/RENAME COLUMN` SQL |
+| `get_create_index_sql` | Generates `CREATE INDEX` SQL |
+| `get_create_foreign_key_sql` | Generates FK DDL |
+| `drop_index` | Executes `DROP INDEX` |
+| `drop_foreign_key` | Executes `ALTER TABLE ... DROP FOREIGN KEY` |
+
+## Building from Source
+
+### Prerequisites
+
+- [Rust](https://www.rust-lang.org/tools/install) (edition 2021)
+- Db2 ODBC driver installed locally
+
+### Build
+
+```bash
+cargo build --release
+```
+
+The binary will be available at:
+
+```bash
+target/release/tabularis-db2-plugin
+```
+
+## Development
+
+### Run Unit Tests
+
+```bash
+cargo test
+```
+
+### Smoke Test the Plugin Process
+
+```bash
+cargo run --bin test_plugin
+```
+
+### Manual JSON-RPC example
+
+```bash
+echo '{"jsonrpc":"2.0","method":"initialize","params":{"settings":{}},"id":1}' \
+  | ./target/debug/tabularis-db2-plugin
+```
+
+### Tech Stack
+
+- **Language:** Rust (edition 2021)
+- **Database driver:** [`odbc-api`](https://crates.io/crates/odbc-api)
+- **Serialization:** serde + serde_json
+- **Protocol:** JSON-RPC 2.0 over stdio
+
+## Known Limitations
+
+- The plugin requires a working Db2 ODBC driver on the host system.
+- `explain_query` currently returns a minimal placeholder result after running `EXPLAIN PLAN FOR`; rich visual plan extraction is not implemented yet.
+- Catalog queries were designed using Db2 catalog conventions and DBeaver’s Db2 extension as a reference, but they should still be validated against the specific Db2 edition/version you target.
+- `get_databases` is intentionally conservative and currently returns the active server/database identity instead of enumerating every possible database on an instance.
+
+## License
+
+Apache License 2.0
