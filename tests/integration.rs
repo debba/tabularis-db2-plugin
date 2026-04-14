@@ -922,9 +922,81 @@ fn test_explain_query() {
     );
 
     assert_eq!(result["driver"], json!("db2"));
+    assert_eq!(result["has_analyze_data"], json!(false));
     assert!(
         result["original_query"].as_str().unwrap().contains("EMPLOYEES"),
         "should preserve original query"
+    );
+
+    // The root node should have a real operator type from the explain tables,
+    // not the old placeholder "DB2 Explain".
+    let root = &result["root"];
+    assert!(
+        !root["id"].as_str().unwrap_or("").is_empty(),
+        "root node should have an id"
+    );
+    assert!(
+        !root["node_type"].as_str().unwrap_or("").is_empty(),
+        "root node should have an operator type"
+    );
+    assert_ne!(
+        root["node_type"].as_str().unwrap_or(""),
+        "DB2 Explain",
+        "root node should have a real operator type, not the placeholder"
+    );
+
+    // raw_output should contain the readable plan text, not the old placeholder.
+    let raw = result["raw_output"].as_str().unwrap_or("");
+    assert!(
+        !raw.contains("not implemented yet"),
+        "raw_output should contain real plan data"
+    );
+}
+
+#[test]
+fn test_explain_query_analyze() {
+    require_db2!();
+    let mut p = Plugin::spawn();
+
+    let result = p.call_ok(
+        "explain_query",
+        p.schema_params(json!({
+            "query": "SELECT * FROM TEST_SCHEMA.EMPLOYEES WHERE DEPT_ID = 1",
+            "analyze": true
+        })),
+    );
+
+    assert_eq!(result["driver"], json!("db2"));
+    assert_eq!(result["has_analyze_data"], json!(true));
+    assert!(
+        result["original_query"].as_str().unwrap().contains("EMPLOYEES"),
+        "should preserve original query"
+    );
+}
+
+#[test]
+fn test_explain_query_join() {
+    require_db2!();
+    let mut p = Plugin::spawn();
+
+    let result = p.call_ok(
+        "explain_query",
+        p.schema_params(json!({
+            "query": "SELECT e.FIRST_NAME, d.DEPT_NAME FROM TEST_SCHEMA.EMPLOYEES e JOIN TEST_SCHEMA.DEPARTMENTS d ON e.DEPT_ID = d.DEPT_ID",
+            "analyze": false
+        })),
+    );
+
+    assert_eq!(result["driver"], json!("db2"));
+
+    // A JOIN query should produce a plan tree with children.
+    let root = &result["root"];
+    let raw = result["raw_output"].as_str().unwrap_or("");
+    // The plan should mention multiple operators for a join.
+    assert!(
+        root["children"].as_array().map(|a| !a.is_empty()).unwrap_or(false)
+            || raw.lines().count() > 1,
+        "a JOIN query should produce a multi-node plan"
     );
 }
 

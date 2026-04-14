@@ -129,7 +129,7 @@ The code is intentionally split by responsibility:
 - `src/main.rs` — request loop and dispatch
 - `src/client.rs` — ODBC connection string construction and query execution
 - `src/handlers/metadata.rs` — schemas, tables, columns, views, indexes, FKs, routines
-- `src/handlers/query.rs` — connection test, query execution, explain stub
+- `src/handlers/query.rs` — connection test, query execution, explain plan
 - `src/handlers/crud.rs` — insert, update, delete
 - `src/handlers/ddl.rs` — SQL generation helpers
 - `src/utils/` — pure helpers with unit tests
@@ -153,6 +153,7 @@ The code is intentionally split by responsibility:
 | `get_routine_parameters` | Returns routine parameters |
 | `get_routine_definition` | Returns the stored routine body when available |
 | `execute_query` | Runs SQL with pagination for `SELECT` / `WITH` queries |
+| `explain_query` | Returns the DB2 execution plan tree by reading explain tables |
 | `insert_record` | Inserts a row |
 | `update_record` | Updates a row by primary key column |
 | `delete_record` | Deletes a row by primary key column |
@@ -275,7 +276,7 @@ echo '{"jsonrpc":"2.0","method":"initialize","params":{"settings":{}},"id":1}' \
 ## Known Limitations
 
 - The plugin requires a working Db2 ODBC driver on the host system.
-- `explain_query` currently returns a minimal placeholder result after running `EXPLAIN PLAN FOR`; rich visual plan extraction is not implemented yet.
+- `explain_query` reads the DB2 explain tables (`SYSTOOLS.EXPLAIN_OPERATOR`, `EXPLAIN_STREAM`, `EXPLAIN_STATEMENT`) to build a plan tree; these tables must exist (see `CALL SYSPROC.SYSINSTALLOBJECTS`). Some cost/row metrics depend on the DB2 edition and optimizer statistics being up to date.
 - Catalog queries were designed using Db2 catalog conventions and DBeaver’s Db2 extension as a reference, but they should still be validated against the specific Db2 edition/version you target.
 - `get_databases` is intentionally conservative and currently returns the active server/database identity instead of enumerating every possible database on an instance.
 
