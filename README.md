@@ -50,7 +50,7 @@ This plugin enables Tabularis to connect to Db2 through **ODBC**, browse schemas
 | Index management | Not yet verified | [#8](https://github.com/debba/tabularis-db2-plugin/issues/8) |
 | Foreign key management | Not yet verified | [#9](https://github.com/debba/tabularis-db2-plugin/issues/9) |
 | Routine support | Not yet verified | [#10](https://github.com/debba/tabularis-db2-plugin/issues/10) |
-| Explain query | Not yet verified | [#11](https://github.com/debba/tabularis-db2-plugin/issues/11) |
+| Explain query | Verified | [#11](https://github.com/debba/tabularis-db2-plugin/issues/11) |
 
 ## Features
 
