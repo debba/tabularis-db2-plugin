@@ -5,10 +5,12 @@
 # tabularis-db2-plugin
 <p align="center">
 
-![](https://img.shields.io/badge/status-experimental-orange?style=flat)
+![](https://img.shields.io/badge/status-WIP-red?style=flat)
 [![Discord](https://img.shields.io/discord/1470772941296894128?color=5865F2&logo=discord&logoColor=white)](https://discord.gg/YrZPHAwMSG)
 
 </p>
+
+> **Work in progress** — this plugin is under active development. See the [verification checklist](#verification-checklist) below for the current status.
 
 An [IBM Db2](https://www.ibm.com/products/db2) plugin for [Tabularis](https://github.com/debba/tabularis), the lightweight database management tool.
 
@@ -18,6 +20,7 @@ This plugin enables Tabularis to connect to Db2 through **ODBC**, browse schemas
 
 ## Table of Contents
 
+- [Verification Checklist](#verification-checklist)
 - [Features](#features)
 - [Supported Db2 Data Types](#supported-db2-data-types)
 - [Requirements](#requirements)
@@ -31,6 +34,23 @@ This plugin enables Tabularis to connect to Db2 through **ODBC**, browse schemas
   - [Docker-based Db2 Environment](#docker-based-db2-environment)
 - [Known Limitations](#known-limitations)
 - [License](#license)
+
+## Verification Checklist
+
+| Feature | Status | Issue |
+|---|---|---|
+| Read table data | Verified | — |
+| Schema & object browsing | Not yet verified | [#1](https://github.com/debba/tabularis-db2-plugin/issues/1) |
+| Query execution | Not yet verified | [#2](https://github.com/debba/tabularis-db2-plugin/issues/2) |
+| Insert record | Not yet verified | [#3](https://github.com/debba/tabularis-db2-plugin/issues/3) |
+| Update record | Not yet verified | [#4](https://github.com/debba/tabularis-db2-plugin/issues/4) |
+| Delete record | Not yet verified | [#5](https://github.com/debba/tabularis-db2-plugin/issues/5) |
+| DDL generation | Not yet verified | [#6](https://github.com/debba/tabularis-db2-plugin/issues/6) |
+| View support | Not yet verified | [#7](https://github.com/debba/tabularis-db2-plugin/issues/7) |
+| Index management | Not yet verified | [#8](https://github.com/debba/tabularis-db2-plugin/issues/8) |
+| Foreign key management | Not yet verified | [#9](https://github.com/debba/tabularis-db2-plugin/issues/9) |
+| Routine support | Not yet verified | [#10](https://github.com/debba/tabularis-db2-plugin/issues/10) |
+| Explain query | Not yet verified | [#11](https://github.com/debba/tabularis-db2-plugin/issues/11) |
 
 ## Features
 
