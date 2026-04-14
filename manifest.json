@@ -41,7 +41,10 @@
       "type": "select",
       "default": "none",
       "description": "Optional DB2 security mode.",
-      "options": ["none", "ssl"]
+      "options": [
+        "none",
+        "ssl"
+      ]
     },
     {
       "key": "current_schema",
@@ -59,27 +62,161 @@
     }
   ],
   "data_types": [
-    { "name": "SMALLINT", "category": "numeric", "requires_length": false, "requires_precision": false, "supports_auto_increment": false },
-    { "name": "INTEGER", "category": "numeric", "requires_length": false, "requires_precision": false, "supports_auto_increment": false },
-    { "name": "BIGINT", "category": "numeric", "requires_length": false, "requires_precision": false, "supports_auto_increment": false },
-    { "name": "DECIMAL", "category": "numeric", "requires_length": false, "requires_precision": true, "supports_auto_increment": false },
-    { "name": "DECFLOAT", "category": "numeric", "requires_length": false, "requires_precision": true, "supports_auto_increment": false },
-    { "name": "REAL", "category": "numeric", "requires_length": false, "requires_precision": false, "supports_auto_increment": false },
-    { "name": "DOUBLE", "category": "numeric", "requires_length": false, "requires_precision": false, "supports_auto_increment": false },
-    { "name": "CHAR", "category": "string", "requires_length": true, "requires_precision": false, "default_length": "1", "supports_auto_increment": false },
-    { "name": "VARCHAR", "category": "string", "requires_length": true, "requires_precision": false, "default_length": "255", "supports_auto_increment": false },
-    { "name": "CLOB", "category": "string", "requires_length": true, "requires_precision": false, "default_length": "1M", "supports_auto_increment": false },
-    { "name": "GRAPHIC", "category": "string", "requires_length": true, "requires_precision": false, "default_length": "1", "supports_auto_increment": false },
-    { "name": "VARGRAPHIC", "category": "string", "requires_length": true, "requires_precision": false, "default_length": "255", "supports_auto_increment": false },
-    { "name": "DBCLOB", "category": "string", "requires_length": true, "requires_precision": false, "default_length": "1M", "supports_auto_increment": false },
-    { "name": "DATE", "category": "date", "requires_length": false, "requires_precision": false, "supports_auto_increment": false },
-    { "name": "TIME", "category": "date", "requires_length": false, "requires_precision": false, "supports_auto_increment": false },
-    { "name": "TIMESTAMP", "category": "date", "requires_length": false, "requires_precision": false, "supports_auto_increment": false },
-    { "name": "BLOB", "category": "binary", "requires_length": true, "requires_precision": false, "default_length": "1M", "supports_auto_increment": false },
-    { "name": "BINARY", "category": "binary", "requires_length": true, "requires_precision": false, "default_length": "16", "supports_auto_increment": false },
-    { "name": "VARBINARY", "category": "binary", "requires_length": true, "requires_precision": false, "default_length": "255", "supports_auto_increment": false },
-    { "name": "XML", "category": "other", "requires_length": false, "requires_precision": false, "supports_auto_increment": false },
-    { "name": "JSON", "category": "json", "requires_length": false, "requires_precision": false, "supports_auto_increment": false }
+    {
+      "name": "SMALLINT",
+      "category": "numeric",
+      "requires_length": false,
+      "requires_precision": false,
+      "supports_auto_increment": false
+    },
+    {
+      "name": "INTEGER",
+      "category": "numeric",
+      "requires_length": false,
+      "requires_precision": false,
+      "supports_auto_increment": false
+    },
+    {
+      "name": "BIGINT",
+      "category": "numeric",
+      "requires_length": false,
+      "requires_precision": false,
+      "supports_auto_increment": false
+    },
+    {
+      "name": "DECIMAL",
+      "category": "numeric",
+      "requires_length": false,
+      "requires_precision": true,
+      "supports_auto_increment": false
+    },
+    {
+      "name": "DECFLOAT",
+      "category": "numeric",
+      "requires_length": false,
+      "requires_precision": true,
+      "supports_auto_increment": false
+    },
+    {
+      "name": "REAL",
+      "category": "numeric",
+      "requires_length": false,
+      "requires_precision": false,
+      "supports_auto_increment": false
+    },
+    {
+      "name": "DOUBLE",
+      "category": "numeric",
+      "requires_length": false,
+      "requires_precision": false,
+      "supports_auto_increment": false
+    },
+    {
+      "name": "CHAR",
+      "category": "string",
+      "requires_length": true,
+      "requires_precision": false,
+      "default_length": "1",
+      "supports_auto_increment": false
+    },
+    {
+      "name": "VARCHAR",
+      "category": "string",
+      "requires_length": true,
+      "requires_precision": false,
+      "default_length": "255",
+      "supports_auto_increment": false
+    },
+    {
+      "name": "CLOB",
+      "category": "string",
+      "requires_length": true,
+      "requires_precision": false,
+      "default_length": "1M",
+      "supports_auto_increment": false
+    },
+    {
+      "name": "GRAPHIC",
+      "category": "string",
+      "requires_length": true,
+      "requires_precision": false,
+      "default_length": "1",
+      "supports_auto_increment": false
+    },
+    {
+      "name": "VARGRAPHIC",
+      "category": "string",
+      "requires_length": true,
+      "requires_precision": false,
+      "default_length": "255",
+      "supports_auto_increment": false
+    },
+    {
+      "name": "DBCLOB",
+      "category": "string",
+      "requires_length": true,
+      "requires_precision": false,
+      "default_length": "1M",
+      "supports_auto_increment": false
+    },
+    {
+      "name": "DATE",
+      "category": "date",
+      "requires_length": false,
+      "requires_precision": false,
+      "supports_auto_increment": false
+    },
+    {
+      "name": "TIME",
+      "category": "date",
+      "requires_length": false,
+      "requires_precision": false,
+      "supports_auto_increment": false
+    },
+    {
+      "name": "TIMESTAMP",
+      "category": "date",
+      "requires_length": false,
+      "requires_precision": false,
+      "supports_auto_increment": false
+    },
+    {
+      "name": "BLOB",
+      "category": "binary",
+      "requires_length": true,
+      "requires_precision": false,
+      "default_length": "1M",
+      "supports_auto_increment": false
+    },
+    {
+      "name": "BINARY",
+      "category": "binary",
+      "requires_length": true,
+      "requires_precision": false,
+      "default_length": "16",
+      "supports_auto_increment": false
+    },
+    {
+      "name": "VARBINARY",
+      "category": "binary",
+      "requires_length": true,
+      "requires_precision": false,
+      "default_length": "255",
+      "supports_auto_increment": false
+    },
+    {
+      "name": "XML",
+      "category": "other",
+      "requires_length": false,
+      "requires_precision": false,
+      "supports_auto_increment": false
+    },
+    {
+      "name": "JSON",
+      "category": "json",
+      "requires_length": false,
+      "requires_precision": false,
+      "supports_auto_increment": false
+    }
   ]
 }
-
