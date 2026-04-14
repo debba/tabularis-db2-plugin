@@ -1,7 +1,7 @@
 {
   "id": "db2",
   "name": "IBM Db2",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "IBM Db2 driver plugin for Tabularis",
   "default_port": 50000,
   "default_username": "db2inst1",
