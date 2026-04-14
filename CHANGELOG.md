@@ -18,4 +18,5 @@ All notable changes to this project will be documented in this file.
 ### Miscellaneous
 
 - *(release)* Push commits to master branch instead of main by @debba
+- *(release)* Update macos runner to 15 and mark explain query verified by @debba
 
