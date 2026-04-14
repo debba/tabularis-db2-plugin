@@ -8,7 +8,8 @@ use std::sync::OnceLock;
 type OdbcHandle = *mut c_void;
 type OdbcLen = isize;
 
-#[link(name = "odbc")]
+#[cfg_attr(windows, link(name = "odbc32"))]
+#[cfg_attr(not(windows), link(name = "odbc"))]
 extern "C" {
     fn SQLFetch(stmt: OdbcHandle) -> i16;
     fn SQLGetData(
