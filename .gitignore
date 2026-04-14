@@ -13,3 +13,6 @@ Thumbs.db
 
 # Temporary local plugin testing artifacts
 *.log
+
+# Docker volumes (managed by docker compose)
+db2-data/

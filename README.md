@@ -28,6 +28,7 @@ This plugin enables Tabularis to connect to Db2 through **ODBC**, browse schemas
 - [Supported Operations](#supported-operations)
 - [Building from Source](#building-from-source)
 - [Development](#development)
+  - [Docker-based Db2 Environment](#docker-based-db2-environment)
 - [Known Limitations](#known-limitations)
 - [License](#license)
 
@@ -166,6 +167,64 @@ target/release/tabularis-db2-plugin
 ```
 
 ## Development
+
+### Docker-based Db2 Environment
+
+A `docker-compose.yml` is provided to spin up a local IBM Db2 Community Edition instance for development and integration testing.
+
+#### Prerequisites
+
+- Docker (or Podman with the `docker` CLI alias)
+- IBM Data Server Driver for ODBC and CLI (`clidriver`) installed on the host and registered in `/etc/odbcinst.ini`
+
+**Installing the IBM clidriver on Linux:**
+
+```bash
+curl -fSL https://public.dhe.ibm.com/ibmdl/export/pub/software/data/db2/drivers/odbc_cli/linuxx64_odbc_cli.tar.gz \
+  -o /tmp/clidriver.tar.gz
+sudo mkdir -p /opt/ibm
+sudo tar xf /tmp/clidriver.tar.gz -C /opt/ibm
+echo -e "[Db2]\nDescription = IBM Db2 ODBC Driver\nDriver = /opt/ibm/clidriver/lib/libdb2o.so" \
+  | sudo tee /etc/odbcinst.ini
+```
+
+#### Start, seed, and manage the test database
+
+A helper script handles the full lifecycle:
+
+```bash
+# Start the container and seed TEST_SCHEMA with fixtures
+./scripts/setup-test-db.sh
+
+# Check container health and seed status
+./scripts/setup-test-db.sh status
+
+# Stop and remove the container (including volumes)
+./scripts/setup-test-db.sh teardown
+```
+
+The first start can take a couple of minutes while Db2 initialises. The script waits up to 300 seconds and streams progress.
+
+#### Connection details
+
+| Parameter | Value |
+|---|---|
+| **Host** | `localhost` |
+| **Port** | `50000` |
+| **Database** | `TESTDB` |
+| **User** | `db2inst1` |
+| **Password** | `db2test123` |
+| **Schema** | `TEST_SCHEMA` |
+
+#### Run integration tests
+
+Once the container is healthy:
+
+```bash
+DB2_TEST=1 cargo test --test integration -- --test-threads=1
+```
+
+> Integration tests are gated behind the `DB2_TEST` environment variable so that `cargo test` alone only runs unit tests (no Db2 connection required).
 
 ### Run Unit Tests
 

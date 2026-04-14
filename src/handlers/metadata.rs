@@ -36,7 +36,11 @@ pub fn get_schemas(
         params,
         settings,
         None,
-        "SELECT SCHEMANAME FROM SYSCAT.SCHEMATA WHERE SCHEMANAME NOT LIKE 'SYS%' ORDER BY SCHEMANAME WITH UR",
+        "SELECT DISTINCT RTRIM(SCHEMANAME) FROM (\
+            SELECT SCHEMANAME FROM SYSCAT.SCHEMATA WHERE SCHEMANAME NOT LIKE 'SYS%' \
+            UNION \
+            SELECT TABSCHEMA FROM SYSCAT.TABLES WHERE TABSCHEMA NOT LIKE 'SYS%' AND TYPE IN ('T', 'V') \
+        ) AS S ORDER BY 1 WITH UR",
     )?;
     Ok(result
         .rows
