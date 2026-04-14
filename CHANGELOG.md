@@ -20,4 +20,5 @@ All notable changes to this project will be documented in this file.
 - *(release)* Push commits to master branch instead of main by @debba
 - *(release)* Update macos runner to 15 and mark explain query verified by @debba
 - *(release)* Update macos runner to version 13 for x86_64 build by @debba
+- *(release)* Update macos runner to macos-latest by @debba
 
